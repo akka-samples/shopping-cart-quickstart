@@ -1,4 +1,3 @@
-// tag::top[]
 package shoppingcart.application;
 
 import akka.Done;
@@ -13,15 +12,10 @@ import shoppingcart.domain.ShoppingCartEvent;
 
 import java.util.Collections;
 
-// end::top[]
 
-// tag::all[]
-// tag::class[]
 @ComponentId("shopping-cart") // <2>
 public class ShoppingCartEntity extends EventSourcedEntity<ShoppingCart, ShoppingCartEvent> { // <1>
-  // end::class[]
 
-  // tag::getCart[]
   private final String entityId;
 
   private static final Logger logger = LoggerFactory.getLogger(ShoppingCartEntity.class);
@@ -35,9 +29,7 @@ public class ShoppingCartEntity extends EventSourcedEntity<ShoppingCart, Shoppin
     return new ShoppingCart(entityId, Collections.emptyList(), false);
   }
 
-  // end::getCart[]
 
-  // tag::addItem[]
   public Effect<Done> addItem(LineItem item) {
     if (currentState().checkedOut()) {
       logger.info("Cart id={} is already checked out.", entityId);
@@ -55,7 +47,6 @@ public class ShoppingCartEntity extends EventSourcedEntity<ShoppingCart, Shoppin
         .thenReply(newState -> Done.getInstance()); // <4>
   }
 
-  // end::addItem[]
 
   public Effect<Done> removeItem(String productId) {
     if (currentState().checkedOut()) {
@@ -74,15 +65,10 @@ public class ShoppingCartEntity extends EventSourcedEntity<ShoppingCart, Shoppin
         .thenReply(newState -> Done.getInstance());
   }
 
-  // tag::getCart[]
-  // tag::read-only[]
   public ReadOnlyEffect<ShoppingCart> getCart() {
     return effects().reply(currentState()); // <3>
   }
-  // end::read-only[]
-  // end::getCart[]
 
-  // tag::checkout[]
   public Effect<Done> checkout() {
     if (currentState().checkedOut())
       return effects().reply(Done.getInstance());
@@ -92,21 +78,13 @@ public class ShoppingCartEntity extends EventSourcedEntity<ShoppingCart, Shoppin
         .deleteEntity() // <2>
         .thenReply(newState -> Done.getInstance());
   }
-  // end::checkout[]
 
-  // tag::addItem[]
   @Override
   public ShoppingCart applyEvent(ShoppingCartEvent event) {
     return switch (event) {
       case ShoppingCartEvent.ItemAdded evt -> currentState().onItemAdded(evt); // <5>
-      // end::addItem[]
       case ShoppingCartEvent.ItemRemoved evt -> currentState().onItemRemoved(evt);
       case ShoppingCartEvent.CheckedOut evt -> currentState().onCheckedOut();
-      // tag::addItem[]
     };
   }
-  // end::addItem[]
-// tag::class[]
 }
-// end::class[]
-// end::all[]

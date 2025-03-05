@@ -1,19 +1,11 @@
-// tag::top[]
-// tag::first-app-top-part-1[]
 package shoppingcart.domain;
 
 import java.util.List;
-// end::first-app-top-part-1[]
-// tag::first-app-top-part-2[]
 import java.util.stream.Collectors;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Predicate;
-// end::first-app-top-part-2[]
-// end::top[]
 
-// tag::all[]
-// tag::domain[]
 
 public record ShoppingCart(String cartId, List<LineItem> items, boolean checkedOut) { // <1>
 
@@ -23,8 +15,6 @@ public record ShoppingCart(String cartId, List<LineItem> items, boolean checkedO
     }
   }
 
-  // end::domain[]
-  // tag::itemAdded[]
   public ShoppingCart onItemAdded(ShoppingCartEvent.ItemAdded itemAdded) {
     var item = itemAdded.item();
     var lineItem = updateItem(item); // <1>
@@ -52,7 +42,6 @@ public record ShoppingCart(String cartId, List<LineItem> items, boolean checkedO
     return items.stream().filter(lineItemExists).findFirst();
   }
 
-  // end::itemAdded[]
 
   public ShoppingCart onItemRemoved(ShoppingCartEvent.ItemRemoved itemRemoved) {
     List<LineItem> updatedItems =
@@ -65,8 +54,5 @@ public record ShoppingCart(String cartId, List<LineItem> items, boolean checkedO
     return new ShoppingCart(cartId, items, true);
   }
 
-  // tag::domain[]
 }
 
-// end::domain[]
-// end::all[]
