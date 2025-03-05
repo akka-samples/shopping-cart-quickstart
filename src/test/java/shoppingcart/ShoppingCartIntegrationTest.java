@@ -7,7 +7,6 @@ import shoppingcart.application.ShoppingCartEntity;
 import shoppingcart.domain.ShoppingCart;
 import shoppingcart.domain.ShoppingCart.LineItem;
 
-// tag::sample-it[]
 public class ShoppingCartIntegrationTest extends TestKitSupport { // <1>
 
   @Test
@@ -22,7 +21,6 @@ public class ShoppingCartIntegrationTest extends TestKitSupport { // <1>
             .invokeAsync(item1)
     );
     Assertions.assertNotNull(response1);
-    // end::sample-it[]
 
     var item2 = new LineItem("tv-table", "Table for TV", 1);
     var response2 = await(
@@ -54,7 +52,6 @@ public class ShoppingCartIntegrationTest extends TestKitSupport { // <1>
     Assertions.assertNotNull(response3);
 
     // confirming only one product remains
-    // tag::sample-it[]
     // confirming only one product remains
     ShoppingCart cartUpdated = await(
         componentClient
@@ -67,4 +64,3 @@ public class ShoppingCartIntegrationTest extends TestKitSupport { // <1>
   }
 
 }
-// end::sample-it[]
