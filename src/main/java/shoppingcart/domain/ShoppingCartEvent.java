@@ -1,10 +1,6 @@
-// tag::top[]
 package shoppingcart.domain;
 
 import akka.javasdk.annotations.TypeName;
-// end::top[]
-// tag::events[]
-// tag::domain[]
 
 public sealed interface ShoppingCartEvent { // <1>
 
@@ -12,7 +8,6 @@ public sealed interface ShoppingCartEvent { // <1>
   record ItemAdded(ShoppingCart.LineItem item) implements ShoppingCartEvent {
   }
 
-// end::domain[]
 
   @TypeName("item-removed")
   record ItemRemoved(String productId) implements ShoppingCartEvent {
@@ -21,7 +16,4 @@ public sealed interface ShoppingCartEvent { // <1>
   @TypeName("checked-out")
   record CheckedOut() implements ShoppingCartEvent {
   }
-// tag::domain[]
 }
-// end::domain[]
-// end::events[]
