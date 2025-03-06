@@ -1,12 +1,9 @@
-// tag::top[]
 package shoppingcart.api;
 
 import akka.http.javadsl.model.HttpResponse;
 import akka.javasdk.annotations.Acl;
-// end::top[]
 import akka.javasdk.annotations.http.Delete;
 import akka.javasdk.annotations.http.Post;
-// tag::top[]
 import akka.javasdk.annotations.http.HttpEndpoint;
 import akka.javasdk.annotations.http.Get;
 import akka.javasdk.annotations.http.Put;
@@ -19,13 +16,10 @@ import shoppingcart.domain.ShoppingCart;
 
 import java.util.concurrent.CompletionStage;
 
-// end::top[]
 
-// tag::class[]
 
 // Opened up for access from the public internet to make the sample service easy to try out.
 // For actual services meant for production this must be carefully considered, and often set more limited
-// tag::endpoint-component-interaction[]
 @Acl(allow = @Acl.Matcher(principal = Acl.Principal.INTERNET))
 @HttpEndpoint("/carts") // <1>
 public class ShoppingCartEndpoint {
@@ -38,9 +32,7 @@ public class ShoppingCartEndpoint {
     this.componentClient = componentClient;
   }
 
-  // end::class[]
 
-  // tag::get[]
   @Get("/{cartId}") // <3>
   public CompletionStage<ShoppingCart> get(String cartId) {
     logger.info("Get cart id={}", cartId);
@@ -49,9 +41,7 @@ public class ShoppingCartEndpoint {
         .invokeAsync(); // <5>
   }
 
-  // end::get[]
 
-  // tag::addItem[]
   @Put("/{cartId}/item") // <6>
   public CompletionStage<HttpResponse> addItem(String cartId, ShoppingCart.LineItem item) {
     logger.info("Adding item to cart id={} item={}", cartId, item);
@@ -60,9 +50,7 @@ public class ShoppingCartEndpoint {
       .invokeAsync(item)
       .thenApply(__ -> HttpResponses.ok()); // <7>
   }
-  // end::endpoint-component-interaction[]
 
-  // end::addItem[]
 
   @Delete("/{cartId}/item/{productId}")
   public CompletionStage<HttpResponse> removeItem(String cartId, String productId) {
@@ -82,6 +70,4 @@ public class ShoppingCartEndpoint {
       .thenApply(__ -> HttpResponses.ok());
   }
 
-  // tag::class[]
 }
-// end::class[]
