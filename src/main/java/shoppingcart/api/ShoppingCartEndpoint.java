@@ -14,8 +14,6 @@ import org.slf4j.LoggerFactory;
 import shoppingcart.application.ShoppingCartEntity;
 import shoppingcart.domain.ShoppingCart;
 
-import java.util.concurrent.CompletionStage;
-
 
 
 // Opened up for access from the public internet to make the sample service easy to try out.
@@ -34,40 +32,40 @@ public class ShoppingCartEndpoint {
 
 
   @Get("/{cartId}") // <3>
-  public CompletionStage<ShoppingCart> get(String cartId) {
+  public ShoppingCart get(String cartId) {
     logger.info("Get cart id={}", cartId);
     return componentClient.forEventSourcedEntity(cartId) // <4>
         .method(ShoppingCartEntity::getCart)
-        .invokeAsync(); // <5>
+        .invoke(); // <5>
   }
 
 
   @Put("/{cartId}/item") // <6>
-  public CompletionStage<HttpResponse> addItem(String cartId, ShoppingCart.LineItem item) {
+  public HttpResponse addItem(String cartId, ShoppingCart.LineItem item) {
     logger.info("Adding item to cart id={} item={}", cartId, item);
-    return componentClient.forEventSourcedEntity(cartId)
+    componentClient.forEventSourcedEntity(cartId)
       .method(ShoppingCartEntity::addItem)
-      .invokeAsync(item)
-      .thenApply(__ -> HttpResponses.ok()); // <7>
+      .invoke(item);
+    return HttpResponses.ok(); // <7>
   }
 
 
   @Delete("/{cartId}/item/{productId}")
-  public CompletionStage<HttpResponse> removeItem(String cartId, String productId) {
+  public HttpResponse removeItem(String cartId, String productId) {
     logger.info("Removing item from cart id={} item={}", cartId, productId);
-    return componentClient.forEventSourcedEntity(cartId)
+    componentClient.forEventSourcedEntity(cartId)
       .method(ShoppingCartEntity::removeItem)
-      .invokeAsync(productId)
-      .thenApply(__ -> HttpResponses.ok());
+      .invoke(productId);
+    return HttpResponses.ok();
   }
 
   @Post("/{cartId}/checkout")
-  public CompletionStage<HttpResponse> checkout(String cartId) {
+  public HttpResponse checkout(String cartId) {
     logger.info("Checkout cart id={}", cartId);
-    return componentClient.forEventSourcedEntity(cartId)
+    componentClient.forEventSourcedEntity(cartId)
       .method(ShoppingCartEntity::checkout)
-      .invokeAsync()
-      .thenApply(__ -> HttpResponses.ok());
+      .invoke();
+    return HttpResponses.ok();
   }
 
 }
