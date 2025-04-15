@@ -1,6 +1,5 @@
 # Build a Shopping Cart
 
-
 The section [Build your first application](https://doc.akka.io/java/build-your-first-application.html) shows how to build this Shopping Cart service step by step.
 
 ## Prerequisites
