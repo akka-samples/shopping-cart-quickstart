@@ -15,8 +15,7 @@ public record ShoppingCart(String cartId, List<LineItem> items, boolean checkedO
     }
   }
 
-  public ShoppingCart onItemAdded(ShoppingCartEvent.ItemAdded itemAdded) {
-    var item = itemAdded.item();
+  public ShoppingCart addItem(LineItem item) {
     var lineItem = updateItem(item); // <1>
     List<LineItem> lineItems = removeItemByProductId(item.productId()); // <2>
     lineItems.add(lineItem); // <3>
@@ -43,9 +42,9 @@ public record ShoppingCart(String cartId, List<LineItem> items, boolean checkedO
   }
 
 
-  public ShoppingCart onItemRemoved(ShoppingCartEvent.ItemRemoved itemRemoved) {
+  public ShoppingCart removeItem(String productId) {
     List<LineItem> updatedItems =
-        removeItemByProductId(itemRemoved.productId());
+        removeItemByProductId(productId);
     updatedItems.sort(Comparator.comparing(LineItem::productId));
     return new ShoppingCart(cartId, updatedItems, checkedOut);
   }
