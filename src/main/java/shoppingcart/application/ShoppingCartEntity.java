@@ -82,8 +82,8 @@ public class ShoppingCartEntity extends EventSourcedEntity<ShoppingCart, Shoppin
   @Override
   public ShoppingCart applyEvent(ShoppingCartEvent event) {
     return switch (event) {
-      case ShoppingCartEvent.ItemAdded evt -> currentState().onItemAdded(evt); // <5>
-      case ShoppingCartEvent.ItemRemoved evt -> currentState().onItemRemoved(evt);
+      case ShoppingCartEvent.ItemAdded evt -> currentState().addItem(evt.item()); // <5>
+      case ShoppingCartEvent.ItemRemoved evt -> currentState().removeItem(evt.productId());
       case ShoppingCartEvent.CheckedOut evt -> currentState().onCheckedOut();
     };
   }
